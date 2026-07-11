@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nifise — Building an Edge From Zero</title>
+<meta name="description" content="Victor 'Nifise' Aakande — documenting a real forex trading journey from zero, and building software on the side.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #170F1F;
+    --surface: #211730;
+    --surface-2: #2A1E3D;
+    --border: #3A2C52;
+    --text: #F5F1FA;
+    --text-dim: #B3A5C7;
+    --text-faint: #6E6087;
+    --lime: #C8F169;
+    --lime-dark: #7A9A2E;
+    --coral: #FF5D5D;
+    --coral-dark: #8F2E2E;
+
+    --display: 'Unbounded', sans-serif;
+    --sans: 'Inter', sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  a { color: inherit; text-decoration: none; }
+  ::selection { background: var(--lime); color: var(--bg); }
+  :focus-visible { outline: 2px solid var(--lime); outline-offset: 3px; }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(600px 400px at 15% 10%, rgba(200,241,105,0.10), transparent 60%),
+      radial-gradient(500px 500px at 90% 25%, rgba(255,93,93,0.10), transparent 60%);
+  }
+
+  .wrap { max-width: 900px; margin: 0 auto; padding: 0 28px; position: relative; z-index: 1; }
+
+  /* ---------- NAV ---------- */
+  nav {
+    position: sticky; top: 0; z-index: 20;
+    background: rgba(23, 15, 31, 0.85);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+  nav .wrap { display: flex; justify-content: space-between; align-items: center; padding: 18px 28px; }
+  .brand { font-family: var(--display); font-size: 15px; font-weight: 700; letter-spacing: 0.01em; }
+  .brand .dot { color: var(--lime); }
+  .nav-links { display: flex; gap: 26px; font-size: 13.5px; color: var(--text-dim); }
+  .nav-links a:hover { color: var(--text); }
+  .nav-cta {
+    font-family: var(--mono); font-size: 12.5px; font-weight: 600;
+    background: var(--lime); color: #14200A; padding: 9px 16px; border-radius: 30px;
+  }
+  .nav-cta:hover { background: #d6f78a; }
+  @media (max-width: 700px) { .nav-links { display: none; } }
+
+  /* ---------- HERO ---------- */
+  .hero { padding: 88px 0 60px; text-align: center; }
+  .handle-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--mono); font-size: 12.5px; color: var(--lime);
+    border: 1px solid var(--lime-dark); background: rgba(200,241,105,0.06);
+    padding: 6px 14px; border-radius: 30px; margin-bottom: 26px;
+  }
+  .handle-tag .pulse {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--lime);
+    animation: pulse 1.6s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+  h1.hero-title {
+    font-family: var(--display); font-weight: 900;
+    font-size: clamp(2.2rem, 7vw, 3.7rem);
+    line-height: 1.1; letter-spacing: -0.01em;
+    max-width: 760px; margin: 0 auto 22px;
+  }
+  h1.hero-title .hl { color: var(--lime); }
+  h1.hero-title .hl2 { color: var(--coral); }
+
+  .hero-sub {
+    font-size: 1.05rem; color: var(--text-dim); max-width: 520px; margin: 0 auto 34px;
+  }
+
+  .hero-cta-row { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 56px; }
+  .btn {
+    font-family: var(--sans); font-size: 14px; font-weight: 600; padding: 13px 24px; border-radius: 30px;
+    display: inline-flex; align-items: center; gap: 8px; transition: all .15s ease;
+  }
+  .btn-fill { background: var(--lime); color: #14200A; }
+  .btn-fill:hover { transform: translateY(-2px); background: #d6f78a; }
+  .btn-line { border: 1.5px solid var(--border); color: var(--text); }
+  .btn-line:hover { border-color: var(--text-dim); }
+
+  .stats-bar {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    overflow: hidden;
+  }
+  .stat-cell { padding: 22px 16px; text-align: center; border-right: 1px solid var(--border); }
+  .stat-cell:last-child { border-right: none; }
+  .stat-cell .num {
+    font-family: var(--display); font-size: 1.6rem; font-weight: 700; color: var(--lime); display: block; margin-bottom: 4px;
+  }
+  .stat-cell .lbl { font-family: var(--mono); font-size: 10.5px; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.05em; }
+  @media (max-width: 560px) { .stat-cell .num { font-size: 1.2rem; } }
+
+  /* ---------- SECTIONS ---------- */
+  section { padding: 70px 0; border-top: 1px solid var(--border); }
+  .section-head { margin-bottom: 36px; max-width: 560px; }
+  .section-label {
+    font-family: var(--mono); font-size: 12px; color: var(--coral);
+    text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; display: block;
+  }
+  .section-head h2 { font-family: var(--display); font-weight: 700; font-size: 1.7rem; }
+  .section-head p { color: var(--text-dim); margin-top: 10px; }
+
+  .story-text { max-width: 640px; color: var(--text-dim); }
+  .story-text p { margin-bottom: 16px; }
+  .story-text strong { color: var(--text); font-weight: 600; }
+
+  /* ---------- PILLARS (dual identity: trader + builder) ---------- */
+  .pillars-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 700px) { .pillars-grid { grid-template-columns: 1fr; } }
+  .pillar-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 26px;
+  }
+  .pillar-card .pillar-tag {
+    font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--lime); margin-bottom: 12px; display: block;
+  }
+  .pillar-card h3 { font-family: var(--display); font-size: 1.1rem; margin-bottom: 10px; }
+  .pillar-card p { color: var(--text-dim); font-size: 14px; }
+
+  /* ---------- FEED ---------- */
+  .feed-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  @media (max-width: 760px) { .feed-grid { grid-template-columns: 1fr; } }
+  .feed-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
+  .feed-card .day-tag { font-family: var(--mono); font-size: 11px; color: var(--coral); margin-bottom: 10px; display: block; }
+  .feed-card p { font-size: 14px; color: var(--text-dim); margin-bottom: 14px; }
+  .feed-card .feed-meta {
+    display: flex; gap: 14px; font-family: var(--mono); font-size: 11px; color: var(--text-faint);
+    border-top: 1px dashed var(--border); padding-top: 10px;
+  }
+
+  /* ---------- LINKS ---------- */
+  .link-stack { display: flex; flex-direction: column; gap: 12px; max-width: 460px; }
+  .link-item {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+    padding: 16px 20px; display: flex; justify-content: space-between; align-items: center;
+    transition: border-color .15s ease, background .15s ease;
+  }
+  .link-item:hover { border-color: var(--lime-dark); background: var(--surface-2); }
+  .link-item .link-label { font-weight: 600; font-size: 14.5px; }
+  .link-item .link-sub { font-family: var(--mono); font-size: 11px; color: var(--text-faint); }
+  .link-item .arrow { color: var(--lime); font-family: var(--mono); }
+
+  .footer-cta {
+    background: linear-gradient(135deg, var(--surface), var(--surface-2));
+    border: 1px solid var(--border); border-radius: 14px; padding: 48px; text-align: center;
+  }
+  .footer-cta h2 { font-family: var(--display); font-size: 1.8rem; margin-bottom: 12px; }
+  .footer-cta p { color: var(--text-dim); margin-bottom: 24px; max-width: 460px; margin-left: auto; margin-right: auto; }
+
+  footer {
+    padding: 32px 0 60px; font-family: var(--mono); font-size: 12px; color: var(--text-faint);
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="brand">nifise<span class="dot">.</span></div>
+    <div class="nav-links">
+      <a href="#story">Story</a>
+      <a href="#pillars">What I Do</a>
+      <a href="#links">Links</a>
+    </div>
+    <a class="nav-cta" href="#links">Follow along →</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="handle-tag"><span class="pulse"></span> @NifiseX — building in public</div>
+    <h1 class="hero-title">Building a real trading edge — <span class="hl">from zero,</span> <span class="hl2">documented raw.</span></h1>
+    <p class="hero-sub">No fake screenshots, no highlight reel. Just an honest log of learning to trade with discipline — and the systems I build along the way.</p>
+    <div class="hero-cta-row">
+      <a class="btn btn-fill" href="https://x.com/NifiseX" target="_blank" rel="noopener">Follow @NifiseX</a>
+      <a class="btn btn-line" href="#story">Read the story</a>
+    </div>
+
+    <div class="stats-bar">
+      <div class="stat-cell"><span class="num">HORC</span><span class="lbl">Core Methodology</span></div>
+      <div class="stat-cell"><span class="num">4TF</span><span class="lbl">Top-Down Analysis</span></div>
+      <div class="stat-cell"><span class="num">~20</span><span class="lbl">Pairs Tracked</span></div>
+    </div>
+  </div>
+</header>
+
+<section id="story">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-label">The Story</span>
+      <h2>Started from actual zero</h2>
+    </div>
+    <div class="story-text">
+      <p><strong>I'm Victor — "Nifise" online.</strong> I started documenting my trading journey publicly with nothing but the willingness to show the real process, mistakes included. No borrowed screenshots, no "I made it" packaging.</p>
+      <p>My approach is built on <strong>HORC and MSNR</strong> — a multi-timeframe, top-down system (monthly → weekly → daily → 4H) that only takes entries when a setup aligns across every level. It's not about calling every move right; it's about only acting when the odds are actually stacked in my favor.</p>
+      <p>I'm still early. I post the losses as openly as the wins, because that's the only version of this that's actually useful to anyone else starting from the same place.</p>
+    </div>
+  </div>
+</section>
+
+<section id="pillars">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-label">What I Do</span>
+      <h2>Two things, both taken seriously</h2>
+    </div>
+    <div class="pillars-grid">
+      <div class="pillar-card">
+        <span class="pillar-tag">Trading</span>
+        <h3>Systematic Forex &amp; Data-Driven Betting Models</h3>
+        <p>Swing trading with a strict multi-timeframe framework, plus a research-driven sports data model (first-half card markets) built and refined through live testing — not theory.</p>
+      </div>
+      <div class="pillar-card">
+        <span class="pillar-tag">Building</span>
+        <h3>Software &amp; Systems</h3>
+        <p>Python, embedded systems, and tools like BookingScout — turning the same discipline I use in trading into software that actually works. Open to freelance builds.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-label">Latest</span>
+      <h2>Recent updates</h2>
+    </div>
+    <div class="feed-grid">
+      <div class="feed-card">
+        <span class="day-tag">JOURNAL</span>
+        <p>Refined the discipline threshold on the card model this week — some patterns held up, one didn't survive the sample size.</p>
+        <div class="feed-meta"><span>💬 —</span><span>🔁 —</span></div>
+      </div>
+      <div class="feed-card">
+        <span class="day-tag">JOURNAL</span>
+        <p>Prop firm research is done. Targeting Maven Standard next once the numbers line up — no rushing the transition.</p>
+        <div class="feed-meta"><span>💬 —</span><span>🔁 —</span></div>
+      </div>
+      <div class="feed-card">
+        <span class="day-tag">JOURNAL</span>
+        <p>Shipped another piece of BookingScout. Slow progress beats fast, broken progress.</p>
+        <div class="feed-meta"><span>💬 —</span><span>🔁 —</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="links">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-label">Find Me</span>
+      <h2>Everything, in one place</h2>
+    </div>
+    <div class="link-stack">
+      <a class="link-item" href="https://x.com/NifiseX" target="_blank" rel="noopener">
+        <div><div class="link-label">Follow on X</div><div class="link-sub">@NifiseX — daily journey updates</div></div>
+        <span class="arrow">→</span>
+      </a>
+      <a class="link-item" href="https://github.com/aakandevictor" target="_blank" rel="noopener">
+        <div><div class="link-label">GitHub</div><div class="link-sub">Code &amp; projects</div></div>
+        <span class="arrow">→</span>
+      </a>
+      <a class="link-item" href="mailto:YOUR_EMAIL@example.com">
+        <div><div class="link-label">Work with me</div><div class="link-sub">Open for freelance builds</div></div>
+        <span class="arrow">→</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="footer-cta">
+      <h2>Come watch it happen in real time</h2>
+      <p>No polish, no guarantees — just an honest record of building something from zero.</p>
+      <a class="btn btn-fill" href="https://x.com/NifiseX" target="_blank" rel="noopener">Follow @NifiseX →</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap" style="display:flex; justify-content:space-between; width:100%; flex-wrap:wrap; gap:10px;">
+    <span>© 2026 Nifise 📌</span>
+    <span>Built with HTML &amp; CSS</span>
+  </div>
+</footer>
+
+</body>
+</html>
