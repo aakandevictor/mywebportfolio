@@ -3,211 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ashworth & Bay Properties — Find Your Next Address</title>
-<meta name="description" content="Premium real estate listings and advisory — demo site built by Victor Aakande.">
+<title>ABE Real Estate Group — Find Your Next Address</title>
+<meta name="description" content="ABE Real Estate Group — Premium real estate listings and advisory in Lagos and Abuja.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
 
-<style>
-  :root {
-    --cream: #F7F4EE;
-    --cream-2: #EFEAE0;
-    --ink: #1D2621;
-    --ink-soft: #4A554E;
-    --green: #1F3D33;
-    --green-dark: #14281F;
-    --gold: #AD8A4E;
-    --gold-soft: #DDC79A;
-    --line: #DAD3C4;
-
-    --serif: 'Newsreader', serif;
-    --sans: 'Inter', sans-serif;
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body {
-    background: var(--cream);
-    color: var(--ink);
-    font-family: var(--sans);
-    line-height: 1.6;
-  }
-  a { color: inherit; text-decoration: none; }
-  ::selection { background: var(--gold-soft); }
-  :focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
-
-  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 32px; }
-
-  /* ---------- NAV ---------- */
-  nav {
-    position: sticky; top: 0; z-index: 20;
-    background: rgba(247, 244, 238, 0.92);
-    backdrop-filter: blur(8px);
-    border-bottom: 1px solid var(--line);
-  }
-  nav .wrap { display: flex; justify-content: space-between; align-items: center; padding: 20px 32px; }
-  .brand { font-family: var(--serif); font-size: 20px; font-weight: 600; letter-spacing: 0.01em; }
-  .brand em { font-style: italic; color: var(--gold); }
-  .nav-links { display: flex; gap: 30px; font-size: 14px; color: var(--ink-soft); }
-  .nav-links a:hover { color: var(--ink); }
-  .nav-cta {
-    font-size: 13px; font-weight: 600; background: var(--green); color: var(--cream);
-    padding: 10px 18px; border-radius: 2px;
-  }
-  .nav-cta:hover { background: var(--green-dark); }
-  @media (max-width: 760px) { .nav-links { display: none; } }
-
-  /* ---------- HERO ---------- */
-  .hero {
-    padding: 96px 0 80px;
-    position: relative;
-    overflow: hidden;
-  }
-  .hero .wrap { position: relative; z-index: 2; }
-  .eyebrow {
-    font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase;
-    color: var(--gold); font-weight: 600; margin-bottom: 20px;
-  }
-  h1.hero-title {
-    font-family: var(--serif);
-    font-weight: 500;
-    font-size: clamp(2.6rem, 6vw, 4.2rem);
-    line-height: 1.08;
-    max-width: 780px;
-    margin-bottom: 24px;
-    letter-spacing: -0.01em;
-  }
-  h1.hero-title em { font-style: italic; color: var(--green); }
-  .hero-sub {
-    font-size: 1.05rem; color: var(--ink-soft); max-width: 520px; margin-bottom: 36px;
-  }
-  .hero-cta-row { display: flex; gap: 14px; flex-wrap: wrap; }
-  .btn {
-    font-size: 14px; font-weight: 600; padding: 13px 24px; border-radius: 2px;
-    display: inline-flex; align-items: center; gap: 8px;
-    transition: all .15s ease;
-  }
-  .btn-fill { background: var(--green); color: var(--cream); }
-  .btn-fill:hover { background: var(--green-dark); }
-  .btn-line { border: 1px solid var(--ink); color: var(--ink); }
-  .btn-line:hover { background: var(--ink); color: var(--cream); }
-
-  .hero-stats {
-    display: flex; gap: 48px; margin-top: 64px; flex-wrap: wrap;
-    border-top: 1px solid var(--line); padding-top: 28px;
-  }
-  .hero-stats div span {
-    display: block; font-family: var(--serif); font-size: 1.8rem; color: var(--green);
-  }
-  .hero-stats div small { color: var(--ink-soft); font-size: 13px; }
-
-  /* ---------- LISTINGS ---------- */
-  section { padding: 80px 0; }
-  .section-head { margin-bottom: 44px; max-width: 560px; }
-  .section-head .eyebrow { margin-bottom: 14px; }
-  .section-head h2 {
-    font-family: var(--serif); font-weight: 500; font-size: 2rem; margin-bottom: 12px;
-  }
-  .section-head p { color: var(--ink-soft); }
-
-  .listings-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 26px;
-  }
-  @media (max-width: 900px) { .listings-grid { grid-template-columns: 1fr; } }
-
-  .listing-card {
-    background: var(--cream-2);
-    border: 1px solid var(--line);
-    border-radius: 4px;
-    overflow: hidden;
-    position: relative;
-  }
-  .listing-photo {
-    height: 200px;
-    background:
-      repeating-linear-gradient(135deg, rgba(31,61,51,0.10) 0 2px, transparent 2px 14px),
-      linear-gradient(160deg, #C9BBA3, #A6987F);
-    position: relative;
-    display: flex; align-items: flex-end;
-  }
-  .listing-photo .placeholder-label {
-    font-size: 11px; color: rgba(255,255,255,0.85); background: rgba(30,38,33,0.55);
-    padding: 4px 8px; margin: 12px; border-radius: 2px; font-family: var(--sans);
-  }
-  .price-tag {
-    position: absolute; top: 14px; right: 14px;
-    background: var(--gold); color: var(--green-dark);
-    font-weight: 700; font-size: 13px; padding: 6px 12px; border-radius: 2px;
-  }
-  .listing-body { padding: 22px 20px; }
-  .listing-title { font-family: var(--serif); font-size: 1.15rem; margin-bottom: 6px; }
-  .listing-loc { font-size: 13px; color: var(--ink-soft); margin-bottom: 14px; }
-  .listing-specs {
-    display: flex; gap: 16px; font-size: 12.5px; color: var(--ink-soft);
-    border-top: 1px dashed var(--line); padding-top: 12px;
-  }
-
-  /* ---------- WHY US ---------- */
-  .why-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-top: 8px;
-  }
-  @media (max-width: 760px) { .why-grid { grid-template-columns: 1fr; } }
-  .why-item .why-num {
-    font-family: var(--serif); font-style: italic; color: var(--gold); font-size: 1.6rem; margin-bottom: 10px; display: block;
-  }
-  .why-item h3 { font-size: 1.05rem; margin-bottom: 8px; font-weight: 600; }
-  .why-item p { color: var(--ink-soft); font-size: 0.94rem; }
-
-  /* ---------- TESTIMONIAL ---------- */
-  .testimonial {
-    background: var(--green);
-    color: var(--cream);
-    border-radius: 6px;
-    padding: 56px 48px;
-    text-align: center;
-  }
-  .testimonial blockquote {
-    font-family: var(--serif); font-style: italic; font-size: 1.5rem; max-width: 640px; margin: 0 auto 22px;
-    line-height: 1.4;
-  }
-  .testimonial cite {
-    font-style: normal; font-size: 13px; color: var(--gold-soft); letter-spacing: 0.04em;
-  }
-
-  /* ---------- CONTACT ---------- */
-  .contact-panel {
-    background: var(--cream-2);
-    border: 1px solid var(--line);
-    border-radius: 6px;
-    padding: 48px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 40px;
-  }
-  @media (max-width: 760px) { .contact-panel { grid-template-columns: 1fr; padding: 32px 24px; } }
-  .contact-panel h2 { font-family: var(--serif); font-size: 1.8rem; margin-bottom: 14px; }
-  .contact-panel p { color: var(--ink-soft); margin-bottom: 24px; }
-  .contact-methods a {
-    display: flex; align-items: center; gap: 10px;
-    font-size: 14px; margin-bottom: 12px; color: var(--green); font-weight: 600;
-  }
-
-  footer {
-    padding: 36px 0 60px; font-size: 13px; color: var(--ink-soft);
-    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px;
-    border-top: 1px solid var(--line);
-  }
-</style>
 </head>
 <body>
 
 <nav>
   <div class="wrap">
-    <div class="brand">Ashworth <em>&</em> Bay</div>
+    <div class="brand">ABE Real Estate Group</div>
     <div class="nav-links">
       <a href="#listings">Listings</a>
       <a href="#why">Why Us</a>
@@ -283,10 +92,10 @@
   </div>
 </section>
 
-<section id="why" style="background:var(--cream-2); border-top:1px solid var(--line); border-bottom:1px solid var(--line);">
+<section id="why">
   <div class="wrap">
     <div class="section-head">
-      <div class="eyebrow">Why Ashworth & Bay</div>
+      <div class="eyebrow">Why ABE Real Estate</div>
       <h2>Property advisory, done properly</h2>
     </div>
     <div class="why-grid">
@@ -326,21 +135,21 @@
         <p>Tell us your budget and area of interest — we'll send a shortlist within 24 hours.</p>
         <div class="contact-methods">
           <a href="https://wa.me/2340000000000" target="_blank" rel="noopener">💬 Chat on WhatsApp</a>
-          <a href="mailto:hello@ashworthbay.example">✉ hello@ashworthbay.example</a>
+          <a href="mailto:hello@aberealestate.example">✉ hello@aberealestate.example</a>
           <a href="tel:+2340000000000">📞 +234 000 000 0000</a>
         </div>
       </div>
       <div>
-        <p style="margin-bottom:10px; font-weight:600; color:var(--ink);">Office</p>
-        <p style="margin-bottom:0;">12 Admiralty Way<br>Lekki Phase 1, Lagos<br>Mon–Sat, 9am–6pm</p>
+        <p class="contact-office-title">Office</p>
+        <p class="contact-office-details">12 Admiralty Way<br>Lekki Phase 1, Lagos<br>Mon–Sat, 9am–6pm</p>
       </div>
     </div>
   </div>
 </section>
 
 <footer>
-  <div class="wrap" style="display:flex; justify-content:space-between; width:100%; flex-wrap:wrap; gap:10px;">
-    <span>© 2026 Ashworth & Bay Properties — Demo built by Victor Aakande</span>
+  <div class="wrap footer-inner">
+    <span>© 2026 ABE Real Estate Group — Demo built by Victor Aakande</span>
     <span>Built with HTML &amp; CSS</span>
   </div>
 </footer>
